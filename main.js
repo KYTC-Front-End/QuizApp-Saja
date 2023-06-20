@@ -101,15 +101,17 @@ submitBtn.addEventListener('click', () => {
       addToLeaderboard(playerNameInput.value, score);
         stopTimer();
         playGameOverSound(); 
-      quiz.innerHTML = `<div style="height:155px;">
+      quiz.innerHTML = `<div style="height:255px;">
            <h3>Game Over!</h3>
            <h2>You answered<span class="score"> ${score}/${randomQuestions.length}</span> questions correctly</h2>
            <button onclick="location.reload()">Reload</button>
+           <button id="local" class="start">leaderboard</button>
            </div>  
            `;
     }
   }
 });
+
 
 
 
@@ -146,15 +148,19 @@ local.addEventListener('click', ()=>{
 
 // استدعاء الدالة لعرض قائمة النتائج في الجدول
 function displayLeaderboardInTable() {
+  
   const leaderboard = JSON.parse(localStorage.getItem('leaderboard'));
-  const leaderboardBody = document.getElementById('leaderboard');
+  const leaderboardBody = document.getElementById('leaderboard-body');
 
   // تحقق مما إذا كانت هناك سجلات في المصفوفة
   if (leaderboard && leaderboard.length > 0) {
+    leaderboard.sort((a, b) => b.score - a.score);
     leaderboard.forEach((entry) => {
       const row = document.createElement('tr');
       const usernameCell = document.createElement('td');
+      usernameCell.classList ="td";
       const scoreCell = document.createElement('td');
+      scoreCell.classList = "td";
       
       usernameCell.textContent = entry.username;
       scoreCell.textContent = entry.score;
