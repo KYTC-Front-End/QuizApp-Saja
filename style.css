@@ -77,6 +77,7 @@
     height: 40px;
     border-radius: 25px;
     font-size: 1.1rem;
+    margin-top:20px
   }
 
 
@@ -123,20 +124,24 @@
 
 h1 {
   color: #333;
+  text-align: center;
 }
 
-#leaderboard-table {
-  margin: 20px auto;
+table {
   border-collapse: collapse;
-  border: 1px solid #ccc;
+  border: 2px solid rgb(200, 200, 200);
+  letter-spacing: 1px;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  background-color: #3f87a6;
+    color: #fff;
+    width: 100%;
 }
 
-#leaderboard-table th, #leaderboard-table td {
-  padding: 8px;
-  border: 1px solid #ccc;
-}
-
-#leaderboard-table th {
-  background-color: #f2f2f2;
+.td,
+th {
+  border: 1px solid rgb(190, 190, 190);
+  padding: 5px 10px;
+  text-align: center;
 }
 
