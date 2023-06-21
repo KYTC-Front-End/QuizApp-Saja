@@ -41,7 +41,7 @@ let currentQuiz = 0;
 let score = 0;
 let minutes = 0;
 let seconds = 0;
-
+var formattedTime = '';
 
 const randomQuestions = [];
 while (randomQuestions.length < 10) {
@@ -98,14 +98,13 @@ submitBtn.addEventListener('click', () => {
     if (currentQuiz < randomQuestions.length) {
         loadQuiz();
     } else {
-      addToLeaderboard(playerNameInput.value, score);
+      addToLeaderboard(playerNameInput.value, score ,formattedTime);
         stopTimer();
         playGameOverSound(); 
-      quiz.innerHTML = `<div style="height:255px;">
+      quiz.innerHTML = `<div style="height:155px;">
            <h3>Game Over!</h3>
            <h2>You answered<span class="score"> ${score}/${randomQuestions.length}</span> questions correctly</h2>
            <button onclick="location.reload()">Reload</button>
-           <button id="local" class="start">leaderboard</button>
            </div>  
            `;
     }
@@ -119,11 +118,11 @@ submitBtn.addEventListener('click', () => {
 
 
 
-/////// localStorage
+/////// leaderboard
 
 
 
-function addToLeaderboard(username, score) {
+function addToLeaderboard(username, score,formattedTime) {
   localStorage.setItem("data", JSON.stringify(quizData));
   localStorage.setItem("questions", JSON.stringify(randomQuestions));
   let leaderboard = JSON.parse(localStorage.getItem('leaderboard'));
@@ -131,8 +130,12 @@ function addToLeaderboard(username, score) {
   if (!leaderboard) {
     leaderboard = [];
   }
-
-  leaderboard.push({ username, score});
+  const existingUser = leaderboard.find((entry) => entry.username === username);
+  if (existingUser) {
+    existingUser.score = score;
+  } else {
+    leaderboard.push({ username, score,formattedTime });
+  }
   localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
 }
 
@@ -145,8 +148,6 @@ local.addEventListener('click', ()=>{
 
 
 
-
-// استدعاء الدالة لعرض قائمة النتائج في الجدول
 function displayLeaderboardInTable() {
   
   const leaderboard = JSON.parse(localStorage.getItem('leaderboard'));
@@ -158,16 +159,15 @@ function displayLeaderboardInTable() {
     leaderboard.forEach((entry) => {
       const row = document.createElement('tr');
       const usernameCell = document.createElement('td');
-      usernameCell.classList ="td";
       const scoreCell = document.createElement('td');
-      scoreCell.classList = "td";
+      const timer = document.createElement('td')
       
       usernameCell.textContent = entry.username;
       scoreCell.textContent = entry.score;
-      
+      timer.textContent = entry.formattedTime
       row.appendChild(usernameCell);
       row.appendChild(scoreCell);
-      
+      row.appendChild(timer);
       leaderboardBody.appendChild(row);
     });
   }
@@ -192,7 +192,7 @@ function displayLeaderboardInTable() {
         seconds = 0;
         minutes++;
       }
-      const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+       formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       timerElement.textContent = formattedTime;
     }
 
